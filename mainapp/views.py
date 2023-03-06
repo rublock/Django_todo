@@ -1,6 +1,8 @@
-from django.http import HttpResponse
 from django.views.generic import TemplateView
 from mainapp import models
+from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class MainPageView(TemplateView):
@@ -11,6 +13,14 @@ class MainPageView(TemplateView):
         context["objects"] = models.DataBase.objects.all()
         return context
 
-# get data from address panel
-def check_kwargs(request, **kwargs):
-    return HttpResponse(f"kwargs:<br>{kwargs}")
+def signupuser(request):
+    if request.method == 'GET':
+        return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm()})
+    else:
+        if request.POST['password1'] == request.POST['password2']:
+            user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
+            user.save()
+        else:
+            # Tell the user that password didn't match
+            return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm(), 'error':'Password did not match'})
+        

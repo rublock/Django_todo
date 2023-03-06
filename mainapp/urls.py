@@ -7,5 +7,5 @@ app_name = MainappConfig.name
 
 urlpatterns = [
     path("", views.MainPageView.as_view()),
-    path("<str:word>/", views.check_kwargs),
+    path("signup/", views.signupuser, name="signupuser"),
 ]
