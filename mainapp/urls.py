@@ -8,4 +8,5 @@ app_name = MainappConfig.name
 urlpatterns = [
     path("", views.MainPageView.as_view()),
     path("signup/", views.signupuser, name="signupuser"),
+    path("todos/", views.todos, name="todos"),
 ]
