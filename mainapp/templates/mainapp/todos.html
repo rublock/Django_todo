@@ -1,1 +1,25 @@
-todos
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    Todos <br><br>
+
+    {% if user.is_authenticated %}
+
+        Logged In as {{ user.username }} <br><br>
+
+        <form action="{% url 'mainapp:logoutuser' %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Logout</button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'mainapp:signupuser' %}">Sign Up</a>
+        <a href="{% url 'mainapp:loginuser' %}">Login</a>
+
+    {% endif %}
+
+{% endblock content %}

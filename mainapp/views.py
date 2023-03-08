@@ -1,10 +1,10 @@
 from django.views.generic import TemplateView
 from mainapp import models
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 
 
 class MainPageView(TemplateView):
@@ -14,7 +14,7 @@ class MainPageView(TemplateView):
         context = super(MainPageView, self).get_context_data(**kwargs)
         context["objects"] = models.DataBase.objects.all()
         return context
-
+    
 def signupuser(request):
     if request.method == 'GET':
         return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm()})
@@ -33,3 +33,19 @@ def signupuser(request):
         
 def todos(request):
     return render(request, 'mainapp/todos.html')
+
+def logoutuser(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('/')
+    
+def loginuser(request):
+    if request.method == 'GET':
+        return render(request, 'mainapp/loginuser.html', {'form': AuthenticationForm()})
+    else:
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'mainapp/loginuser.html', {'form': AuthenticationForm(), 'error': 'User name and password did not match'})
+        else:
+            login(request, user)
+            return redirect('/todos/')
