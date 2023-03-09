@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
+from .forms import TodoForm
+from .models import Todo
 
 
 class MainPageView(TemplateView):
@@ -32,7 +34,8 @@ def signupuser(request):
             return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm(), 'error':'Password did not match'})
         
 def todos(request):
-    return render(request, 'mainapp/todos.html')
+    todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
+    return render(request, 'mainapp/todos.html', {'todos': todos })
 
 def logoutuser(request):
     if request.method == 'POST':
@@ -49,3 +52,16 @@ def loginuser(request):
         else:
             login(request, user)
             return redirect('/todos/')
+
+def createtodos(request):
+    if request.method == 'GET':
+        return render(request, 'mainapp/createtodos.html', {'todoform': TodoForm()})
+    else:
+        try:
+            form = TodoForm(request.POST)
+            newtodo = form.save(commit=False)
+            newtodo.user = request.user
+            newtodo.save()
+            return redirect('/')
+        except ValueError:
+            return render(request, 'mainapp/createtodos.html', {'error': 'Field text is too long'})
