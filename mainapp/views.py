@@ -1,12 +1,13 @@
 from django.views.generic import TemplateView
 from mainapp import models
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from .forms import TodoForm
 from .models import Todo
+from django.utils import timezone
 
 
 class MainPageView(TemplateView):
@@ -65,3 +66,30 @@ def createtodos(request):
             return redirect('/')
         except ValueError:
             return render(request, 'mainapp/createtodos.html', {'error': 'Field text is too long'})
+
+def todo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'GET':
+        formtodo = TodoForm(instance=todo)
+        return render(request, 'mainapp/todo.html', {'todo': todo, 'formtodo': formtodo })
+    else:
+        try:
+            formtodo = TodoForm(request.POST, instance=todo)
+            formtodo.save()
+            return redirect('/todos/')
+        except ValueError:
+            return render(request, 'mainapp/todo.html', {'todo': todo, 'formtodo': formtodo, 'error': 'Data error' })
+        
+def completetodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.datecompleted = timezone.now()
+        todo.save()
+        return redirect('/todos/')
+    
+def deletetodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.delete()
+        return redirect('/todos/')
+

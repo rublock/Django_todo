@@ -26,15 +26,23 @@
     <ul>
         {% for i in todos %}
             {% if i.important %} 
-                <li><b>{{ i.title }}</b>
-                {% if i.memo %}
-                    - {{ i.memo }}
-                {% endif %}</li>
+                <li>
+                    <a href="{% url 'mainapp:todo' i.id %}">
+                        <b>{{ i.title }}</b>
+                        {% if i.memo %}
+                            - {{ i.memo }}
+                        {% endif %}
+                    </a>
+                </li>
             {% else %}
-                <li>{{ i.title }}
-                {% if i.memo %}
-                    - {{ i.memo }}
-                {% endif %}</li>
+                <li>
+                    <a href="{% url 'mainapp:todo' i.id %}">
+                        {{ i.title }}
+                        {% if i.memo %}
+                            - {{ i.memo }}
+                        {% endif %}
+                    </a>
+                </li>
             {% endif %}
         {% endfor %}
     </ul>

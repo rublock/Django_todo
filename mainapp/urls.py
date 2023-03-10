@@ -12,4 +12,7 @@ urlpatterns = [
     path("login/", views.loginuser, name="loginuser"),
     path("todos/", views.todos, name="todos"),
     path("createtodos/", views.createtodos, name="createtodos"),
+    path("todo/<int:todo_pk>", views.todo, name="todo"),
+    path("todo/<int:todo_pk>/complete", views.completetodo, name="completetodo"),
+    path("todo/<int:todo_pk>/delete", views.deletetodo, name="deletetodo"),
 ]
