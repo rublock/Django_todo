@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    Todos <br><br>
+
+    {% if user.is_authenticated %}
+
+        Logged In as {{ user.username }} <br><br>
+
+        <form action="{% url 'mainapp:logoutuser' %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Logout</button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'mainapp:signupuser' %}">Sign Up</a>
+        <a href="{% url 'mainapp:loginuser' %}">Login</a>
+
+    {% endif %}
+
+    <br>
+    <ul>
+        {% for i in todos %}
+            {% if i.important %} 
+                <li>
+                    <a href="{% url 'mainapp:todo' i.id %}">
+                        <b>{{ i.title }}</b>
+                        {% if i.memo %}
+                            - {{ i.memo }}
+                        {% endif %}
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'mainapp:todo' i.id %}">
+                        {{ i.title }}
+                        {% if i.memo %}
+                            - {{ i.memo }}
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    Todo <br><br>
+
+    {% if user.is_authenticated %}
+
+    Logged In as {{ user.username }} <br><br>
+
+    <form action="{% url 'mainapp:logoutuser' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Logout</button>
+    </form>
+
+    {% else %}
+
+    <a href="{% url 'mainapp:signupuser' %}">Sign Up</a>
+    <a href="{% url 'mainapp:loginuser' %}">Login</a>
+
+    {% endif %}
+
+    <br>
+
+    {{ todo.title }}
+
+    <br>
+
+    {{ error }}
+
+    <br>
+
+    <form method="POST">
+        {{ formtodo.as_p }}
+        {% csrf_token %}
+        <button type="submit">Save</button>
+    </form>
+
+    <form method="POST" action="{% url 'mainapp:completetodo' todo.id %}">
+        {% csrf_token %}
+        <button type="submit">Complete</button>
+    </form>
+
+    <form method="POST" action="{% url 'mainapp:deletetodo' todo.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+
+{% endblock content %}
