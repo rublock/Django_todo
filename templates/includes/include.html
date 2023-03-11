@@ -1,4 +1,12 @@
 <!-- Some include -->
-<select class="form-select" aria-label="Default select example" style="width: 200px; margin: 5px 10px 0 0; height: 39px;">
-    <option selected>This is includes</option>
-  </select>
+<div class="dropdown show" style="margin: 5px 5px 0 0;">
+  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Выбитите действие
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="{% url 'mainapp:createtodos' %}">Создать дело</a>
+    <a class="dropdown-item" href="{% url 'mainapp:todos' %}">Список текущих дел</a>
+    <a class="dropdown-item" href="{% url 'mainapp:completedtodos' %}">Список выполненых дел</a>
+  </div>
+</div>

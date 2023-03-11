@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    Todos <br><br>
+    Completed todos <br><br>
 
     <ul>
         {% for i in todos %}
@@ -14,6 +14,7 @@
                         {% if i.memo %}
                             - {{ i.memo }}
                         {% endif %}
+                        {{ i.datecompleted|date:'j M Y H:i' }}
                     </a>
                 </li>
             {% else %}
@@ -23,6 +24,7 @@
                         {% if i.memo %}
                             - {{ i.memo }}
                         {% endif %}
+                        {{ i.datecompleted|date:'j M Y H:i' }}
                     </a>
                 </li>
             {% endif %}

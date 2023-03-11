@@ -26,24 +26,36 @@
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
           <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-          <span class="btn btn-primary" style="margin: 5px 50px 0 0;">Home</span>
+          <span class="btn btn-primary" style="margin: 5px 50px 0 0;">TODO Inc.</span>
         </a>
   
         {% include 'includes/include.html' %}
 
-        <div class="text-end">
-          <a href="{% url 'mainapp:todos' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0;">Todos</a>
-          <a href="{% url 'mainapp:signupuser'%}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0;">SIGN</a>
-          <a href="{% url 'admin:index' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0;">Admin</a>
-        </div>
+          {% if user.is_authenticated %}
+            <a href="{% url 'mainapp:todos' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">{{ user.username }}</a>
+            <form action="{% url 'mainapp:logoutuser' %}" method="POST">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Logout</button>
+            </form>
+          {% else %}
+            <a href="{% url 'mainapp:loginuser' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Login</a>
+            <a href="{% url 'mainapp:signupuser' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Sign up</a>
+          {% endif %}
+
+          <a href="{% url 'admin:index' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Django</a>
         
       </header>
 
     {% block content %}{% endblock content %}
 
-    <script src="{% static 'js/bootstrap.min.js' %}"
+    <!-- <script src="{% static 'js/bootstrap.min.js' %}"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </body>
 
