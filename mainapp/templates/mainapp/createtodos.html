@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load bootstrap5 %}
 
 {% block content %}
 
-    <div class="container" style="width: 540px;">
-        <span class="text-danger">{{ error }}</span><br><br>
-        <form method="POST">
-            {% csrf_token %}
-            {% bootstrap_form todoform %}
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
-    </div>
+<div class="container" style="width: 540px;">
+    <span class="text-danger">{{ error }}</span><br><br>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Заголовок</label>
+            {{ todoform.title }}
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+            {{ todoform.memo }}
+        </div>
+        {{ todoform.important }}<span style="margin-left: 5px;">Важно</span><br><br>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+</div>
 
 
 {% endblock content %}

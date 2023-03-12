@@ -5,10 +5,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
-from .forms import TodoForm
+from .forms import UserTodoForm
 from .models import Todo
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from mainapp.forms import UserLoginForm, UserTodoForm
 
 
 class MainPageView(TemplateView):
@@ -43,11 +44,11 @@ def logoutuser(request):
     
 def loginuser(request):
     if request.method == 'GET':
-        return render(request, 'mainapp/loginuser.html', {'form': AuthenticationForm()})
+        return render(request, 'mainapp/loginuser.html', {'form': UserLoginForm()})
     else:
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user is None:
-            return render(request, 'mainapp/loginuser.html', {'form': AuthenticationForm(), 'error': 'User name and password did not match'})
+            return render(request, 'mainapp/loginuser.html', {'form': UserLoginForm(), 'error': 'User name and password did not match'})
         else:
             login(request, user)
             return redirect('/todos/')
@@ -55,10 +56,10 @@ def loginuser(request):
 @login_required
 def createtodos(request):
     if request.method == 'GET':
-        return render(request, 'mainapp/createtodos.html', {'todoform': TodoForm()})
+        return render(request, 'mainapp/createtodos.html', {'todoform': UserTodoForm()})
     else:
         try:
-            form = TodoForm(request.POST)
+            form = UserTodoForm(request.POST)
             newtodo = form.save(commit=False)
             newtodo.user = request.user
             newtodo.save()
@@ -70,11 +71,11 @@ def createtodos(request):
 def todo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'GET':
-        formtodo = TodoForm(instance=todo)
+        formtodo = UserTodoForm(instance=todo)
         return render(request, 'mainapp/todo.html', {'todo': todo, 'formtodo': formtodo })
     else:
         try:
-            formtodo = TodoForm(request.POST, instance=todo)
+            formtodo = UserTodoForm(request.POST, instance=todo)
             formtodo.save()
             return redirect('/todos/')
         except ValueError:
