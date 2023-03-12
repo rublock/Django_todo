@@ -6,10 +6,4 @@
 
     Home <br><br>
 
-    {% for i in objects %}
-        <div class="mx-auto d-block mt-5" style="text-align: center">{{ i.title }}</div>
-        <div class="mx-auto d-block" style="text-align: center">{{ i.description }}</div>
-        <a href="{{ i.url }}"><img src="{{ i.image }}" class="rounded mx-auto d-block"></img></a>
-    {% endfor %}
-
 {% endblock content %}

@@ -4,7 +4,6 @@ from .models import *
 class TodoAdmin(admin.ModelAdmin):
     readonly_fields = ('created',)
 
-admin.site.register(DataBase)
 admin.site.register(Todo, TodoAdmin)
 
 

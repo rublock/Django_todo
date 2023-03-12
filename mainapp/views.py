@@ -8,15 +8,11 @@ from django.contrib.auth import login, logout, authenticate
 from .forms import TodoForm
 from .models import Todo
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(MainPageView, self).get_context_data(**kwargs)
-        context["objects"] = models.DataBase.objects.all()
-        return context
     
 def signupuser(request):
     if request.method == 'GET':
@@ -33,11 +29,13 @@ def signupuser(request):
         else:
             # Tell the user that password didn't match
             return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm(), 'error':'Password did not match'})
-        
+
+@login_required        
 def todos(request):
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
     return render(request, 'mainapp/todos.html', {'todos': todos })
 
+@login_required
 def logoutuser(request):
     if request.method == 'POST':
         logout(request)
@@ -54,6 +52,7 @@ def loginuser(request):
             login(request, user)
             return redirect('/todos/')
 
+@login_required
 def createtodos(request):
     if request.method == 'GET':
         return render(request, 'mainapp/createtodos.html', {'todoform': TodoForm()})
@@ -65,8 +64,9 @@ def createtodos(request):
             newtodo.save()
             return redirect('/')
         except ValueError:
-            return render(request, 'mainapp/createtodos.html', {'error': 'Field text is too long'})
+            return render(request, 'mainapp/createtodos.html', {'error': 'Data error'})
 
+@login_required
 def todo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'GET':
@@ -79,21 +79,23 @@ def todo(request, todo_pk):
             return redirect('/todos/')
         except ValueError:
             return render(request, 'mainapp/todo.html', {'todo': todo, 'formtodo': formtodo, 'error': 'Data error' })
-        
+
+@login_required        
 def completetodo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
         todo.datecompleted = timezone.now()
         todo.save()
         return redirect('/todos/')
-    
+
+@login_required    
 def deletetodo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
         todo.delete()
         return redirect('/todos/')
-    
+
+@login_required    
 def completedtodos(request):
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
     return render(request, 'mainapp/completedtodos.html', {'todos': todos })
-

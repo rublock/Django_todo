@@ -9,6 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
     <title>Django_base</title>
 
     <!-- Bootstrap core CSS -->
@@ -26,7 +30,7 @@
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
           <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-          <span class="btn btn-primary" style="margin: 5px 50px 0 0;">TODO Inc.</span>
+          <span class="btn btn-primary" style="margin: 5px 50px 0 0;">TODO</span>
         </a>
   
         {% include 'includes/include.html' %}
@@ -43,7 +47,7 @@
             <a href="{% url 'mainapp:signupuser' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Sign up</a>
           {% endif %}
 
-          <a href="{% url 'admin:index' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Django</a>
+          <a href="{% url 'admin:index' %}" type="button" class="btn btn-warning" style="margin: 5px 5px 0 0; height: 38px;">Django admin</a>
         
       </header>
 
