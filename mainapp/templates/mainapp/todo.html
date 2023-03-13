@@ -3,30 +3,28 @@
 
 {% block content %}
 
-    Todo <br><br>
-
-    {{ todo.title }}
-
-    <br>
-
     {{ error }}
+    
+    <div class="container" style="width: 540px;" style="display: flex; flex-direction: row;">
+        <span class="text-danger">{{ error }}</span><br><br>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Заголовок</label>
+                <input type="text" name="title" class="form-control" required="" id="id_title" value="{{ todo.title }}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+                <textarea name="memo" cols="40" rows="10" class="form-control" style="height: 105px;" required="" id="id_memo">{{ todo.memo }}</textarea>
+            </div>
+            {{ todoform.important }}<span style="margin-left: 5px;">Важно</span><br><br>
+            <button type="submit" class="btn btn-primary">Изменить</button>
+            <button type="submit" class="btn btn-warning" formaction="{% url 'mainapp:completetodo' todo.id %}">Выполнено</button>
+            <button type="submit" class="btn btn-danger" formaction="{% url 'mainapp:deletetodo' todo.id %}">Удалить</button>
+        </form>
+    </div>
 
-    <br>
 
-    <form method="POST">
-        {{ formtodo.as_p }}
-        {% csrf_token %}
-        <button type="submit">Save</button>
-    </form>
 
-    <form method="POST" action="{% url 'mainapp:completetodo' todo.id %}">
-        {% csrf_token %}
-        <button type="submit">Complete</button>
-    </form>
-
-    <form method="POST" action="{% url 'mainapp:deletetodo' todo.id %}">
-        {% csrf_token %}
-        <button type="submit">Delete</button>
-    </form>
 
 {% endblock content %}

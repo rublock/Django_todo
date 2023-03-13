@@ -72,14 +72,14 @@ def todo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'GET':
         formtodo = UserTodoForm(instance=todo)
-        return render(request, 'mainapp/todo.html', {'todo': todo, 'formtodo': formtodo })
+        return render(request, 'mainapp/todo.html', {'todo': todo, 'todoform': UserTodoForm() })
     else:
         try:
             formtodo = UserTodoForm(request.POST, instance=todo)
             formtodo.save()
             return redirect('/todos/')
         except ValueError:
-            return render(request, 'mainapp/todo.html', {'todo': todo, 'formtodo': formtodo, 'error': 'Data error' })
+            return render(request, 'mainapp/todo.html', {'todo': todo, 'todoform': UserTodoForm(), 'error': 'Data error' })
 
 @login_required        
 def completetodo(request, todo_pk):
