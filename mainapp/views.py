@@ -9,15 +9,12 @@ from .forms import UserTodoForm
 from .models import Todo
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from mainapp.forms import UserLoginForm, UserTodoForm
+from mainapp.forms import *
 
-
-class MainPageView(TemplateView):
-    template_name = "mainapp/index.html"
     
 def signupuser(request):
     if request.method == 'GET':
-        return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm()})
+        return render(request, 'mainapp/signupuser.html', {'form': UserSignupForm()})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -26,15 +23,20 @@ def signupuser(request):
                 login(request, user)
                 return redirect('/todos/')
             except IntegrityError:
-                return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm(), 'error':'This username is already in use'})
+                return render(request, 'mainapp/signupuser.html', {'form': UserSignupForm(), 'error':'This username is already in use'})
         else:
             # Tell the user that password didn't match
-            return render(request, 'mainapp/signupuser.html', {'form': UserCreationForm(), 'error':'Password did not match'})
+            return render(request, 'mainapp/signupuser.html', {'form': UserSignupForm(), 'error':'Password did not match'})
 
 @login_required        
 def todos(request):
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
     return render(request, 'mainapp/todos.html', {'todos': todos })
+
+@login_required        
+def index(request):
+    todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
+    return render(request, 'mainapp/index.html', {'todos': todos })
 
 @login_required
 def logoutuser(request):
@@ -51,7 +53,7 @@ def loginuser(request):
             return render(request, 'mainapp/loginuser.html', {'form': UserLoginForm(), 'error': 'User name and password did not match'})
         else:
             login(request, user)
-            return redirect('/todos/')
+            return redirect('/')
 
 @login_required
 def createtodos(request):

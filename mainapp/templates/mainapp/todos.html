@@ -3,30 +3,30 @@
 
 {% block content %}
 
-    Todos <br><br>
-
-    <ul>
-        {% for i in todos %}
-            {% if i.important %} 
-                <li>
-                    <a href="{% url 'mainapp:todo' i.id %}">
-                        <b>{{ i.title }}</b>
-                        {% if i.memo %}
-                            - {{ i.memo }}
-                        {% endif %}
-                    </a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{% url 'mainapp:todo' i.id %}">
-                        {{ i.title }}
-                        {% if i.memo %}
-                            - {{ i.memo }}
-                        {% endif %}
-                    </a>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <ul class="list-group">
+            {% for i in todos reversed %}
+                {% if i.important %}
+                    <li class="list-group-item">
+                        <a href="{% url 'mainapp:todo' i.id %}" style="text-decoration: none; color: black;">
+                            <b>{{ i.title }}</b>
+                            {% if i.memo %}
+                                - {{ i.memo }}
+                            {% endif %}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="list-group-item">
+                        <a href="{% url 'mainapp:todo' i.id %}" style="text-decoration: none; color: black;">
+                            {{ i.title }}
+                            {% if i.memo %}
+                                - {{ i.memo }}
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul> 
+    </div>
 
 {% endblock content %}

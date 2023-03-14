@@ -14,6 +14,18 @@ class UserLoginForm(AuthenticationForm):
     }))
 
 
+class UserSignupForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control', 'placeholder': 'Введите имя пользователя'
+    }))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'Введите пароль'
+    }))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'Подтвердите пароль пароль'
+    }))
+
+
 class UserTodoForm(ModelForm):
 
     def todo(request, todo_pk):

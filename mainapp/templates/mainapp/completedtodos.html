@@ -3,32 +3,26 @@
 
 {% block content %}
 
-    Completed todos <br><br>
-
-    <ul>
-        {% for i in todos %}
-            {% if i.important %} 
-                <li>
-                    <a href="{% url 'mainapp:todo' i.id %}">
-                        <b>{{ i.title }}</b>
-                        {% if i.memo %}
-                            - {{ i.memo }}
-                        {% endif %}
-                        {{ i.datecompleted|date:'j M Y H:i' }}
-                    </a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{% url 'mainapp:todo' i.id %}">
-                        {{ i.title }}
-                        {% if i.memo %}
-                            - {{ i.memo }}
-                        {% endif %}
-                        {{ i.datecompleted|date:'j M Y H:i' }}
-                    </a>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <ul class="list-group">
+            {% for i in todos reversed %}
+                {% if i.important %}
+                    <li class="list-group-item">
+                        <a href="{% url 'mainapp:todo' i.id %}" style="text-decoration: none; color: black;">
+                            <b>{{ i.title }}</b>
+                            - выполнено {{ i.datecompleted|date:'j M Y H:i' }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="list-group-item">
+                        <a href="{% url 'mainapp:todo' i.id %}" style="text-decoration: none; color: black;">
+                            {{ i.title }}
+                            - выполнено {{ i.datecompleted|date:'j M Y H:i' }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 
 {% endblock content %}
